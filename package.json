@@ -7,7 +7,8 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "test": "vitest"
+    "test": "vitest",
+    "dev:playground": "pnpm --filter playground dev"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
   "dependencies": {
     "@rollup/plugin-alias": "^5.1.0",
     "rollup": "^4.9.5",
+    "vite": "^5.0.8",
     "vitest": "^1.2.0"
   }
 }

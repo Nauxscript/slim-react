@@ -22,7 +22,7 @@
 
 // v2 virtual dom to real dom
 
-import { createRoot } from '../dist/slim-react.esm-bundler.js';
+import { createRoot } from 'slim-react';
 import App from './App.js';
 
 createRoot(document.getElementById('root')).render(App)

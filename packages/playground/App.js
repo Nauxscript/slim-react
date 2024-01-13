@@ -1,4 +1,4 @@
-import { createElement } from '../dist/slim-react.esm-bundler.js';
+import { createElement } from 'slim-react';
 
 const App = createElement('div', {
   id: 'app'
