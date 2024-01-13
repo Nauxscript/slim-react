@@ -1,12 +1,20 @@
 {
-  "name": "slim-react",
+  "name": "slim-react-repo",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "private": "true",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@rollup/plugin-alias": "^5.1.0",
+    "rollup": "^4.9.5",
+    "vitest": "^1.2.0"
+  }
 }
