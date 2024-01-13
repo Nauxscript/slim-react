@@ -20,7 +20,11 @@ importers:
 
   packages/core: {}
 
-  packages/react-dom: {}
+  packages/react-dom:
+    dependencies:
+      '@slim-react/core':
+        specifier: workspace*
+        version: link:../core
 
   packages/slim-react:
     dependencies:
