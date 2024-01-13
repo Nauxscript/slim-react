@@ -21,7 +21,7 @@
 // root.append(app)
 
 // v2 virtual dom to real dom
-import React from 'slim-react';
+import React from 'slim-react'
 import App from './App.jsx';
 
 React.createRoot(document.getElementById('root')).render(App)
