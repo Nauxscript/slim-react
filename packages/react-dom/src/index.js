@@ -1,3 +1,9 @@
-export const createRoot = () => {
-  console.log('hello, Slim React!'); 
+import { render } from '@slim-react/core';
+
+export function createRoot(container) {
+  return {
+    render(App) {
+      render(App, container)      
+    }
+  } 
 }

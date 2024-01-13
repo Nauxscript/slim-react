@@ -7,6 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
+  "dependencies": {
+    "@slim-react/core": "workspace*"
+  },
   "author": "nauxscript",
   "license": "ISC"
 }
