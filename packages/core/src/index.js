@@ -1,7 +1,11 @@
+export function createDom(type) {
+  return type === 'TEXT_ELEMENT'
+            ? document.createTextNode('')
+            : document.createElement(type)  
+}
+
 export function render(vdom, container) {
-  const el = vdom.type === 'TEXT_ELEMENT'
-              ? document.createTextNode('')
-              : document.createElement(vdom.type)
+  const el = createDom(vdom.type)
   // set props
   Object.keys(vdom.props).forEach(key => {
     if (key !== 'children') {
