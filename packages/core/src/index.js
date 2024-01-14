@@ -1,33 +1,91 @@
-export function createDom(type) {
+function createDom(type) {
   return type === 'TEXT_ELEMENT'
-            ? document.createTextNode('')
-            : document.createElement(type)  
+  ? document.createTextNode('')
+  : document.createElement(type)  
 }
 
-export function render(vdom, container) {
-  const el = createDom(vdom.type)
-  // set props
-  Object.keys(vdom.props).forEach(key => {
+function updateProps(el, props) {
+  Object.keys(props).forEach(key => {
     if (key !== 'children') {
-      el[key] = vdom.props[key]
+      el[key] = props[key]
     }
-  });
-
-  // render children
-  vdom.props.children.forEach(child => {
-    render(child, el)
-  })
-
-  container.append(el)
+  }); 
 }
 
-export function createTextNode(text) {
+function initChildren(fiber) {
+  let prevFiber = null
+  fiber.props.children.forEach((child, index) => {
+    const newFiber = {
+      type: child.type,
+      props: child.props,
+      dom: null,
+      child: null,
+      sibling: null,
+      parent: fiber 
+    }
+    if (index === 0) {
+      fiber.child = newFiber 
+    } else {
+      prevFiber.sibling = child
+    }
+    prevFiber = newFiber
+  }) 
+}
+
+let nextFiber = null
+
+function loop(deadline) {
+  let shouldYield = false
+  while (!shouldYield && nextFiber) {
+    console.log(nextFiber);
+    nextFiber = perfromFiberUnit(nextFiber)
+    shouldYield = deadline.timeRemaining() < 1
+  }
+  requestIdleCallback(loop)
+}
+
+function perfromFiberUnit(fiber) {
+  if (!fiber.dom) {
+    // create dom
+    const el = (fiber.dom = createDom(fiber.type))
+    // set props
+    updateProps(el, fiber.props)
+
+    // appen
+    fiber.parent.dom.append(el)
+  }
+
+  initChildren(fiber)  
+
+  if (fiber.child) {
+    return fiber.child 
+  }
+
+  if (fiber.sibling) {
+    return fiber.sibling
+  }
+
+  return fiber.parent.sibling
+}
+
+function createTextNode(text) {
   return {
     type: 'TEXT_ELEMENT',
     props: {
       nodeValue: text,
       children: []
     } 
+  }
+}
+
+requestIdleCallback(loop)
+
+export function render(vdom, container) {
+  nextFiber = {
+    dom: container,
+    props: {
+      children: [vdom]
+    }
   }
 }
 
