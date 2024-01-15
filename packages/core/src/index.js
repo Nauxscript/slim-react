@@ -26,7 +26,7 @@ function initChildren(fiber) {
     if (index === 0) {
       fiber.child = newFiber 
     } else {
-      prevFiber.sibling = child
+      prevFiber.sibling = newFiber
     }
     prevFiber = newFiber
   }) 
