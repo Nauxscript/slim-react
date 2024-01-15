@@ -82,7 +82,7 @@ function perfromFiberUnit(fiber) {
   }
 
   if (isFunctionComponent()) {
-    fiber.props.children = [fiber.type()]
+    fiber.props.children = [fiber.type(fiber.props)]
   }
 
   initChildren(fiber)  
@@ -127,7 +127,7 @@ export function createElement(type, props, ...children) {
     type,
     props: {
       ...props,
-      children: children.map(c => typeof c === 'string' ? createTextNode(c) : c)
+      children: children.map(c => typeof c === 'object' ? c : createTextNode(c))
     }
   } 
 }

@@ -1,11 +1,11 @@
-function CounterContainer() {
+function CounterContainer({num}) {
   return <div>
-    <Counter></Counter>
+    <Counter num={num}></Counter>
   </div>  
 }
 
-function Counter() {
-  return <div>Counter</div> 
+function Counter({num}) {
+  return <div>Counter: {num}</div> 
 }
 
 function App() {
@@ -16,7 +16,8 @@ function App() {
         <span>,</span>
       </div>
       <div>Slim React!</div>
-      <CounterContainer></CounterContainer>
+      <CounterContainer num={10} ></CounterContainer>
+      <CounterContainer num={20} ></CounterContainer>
     </div>
   )  
 }
