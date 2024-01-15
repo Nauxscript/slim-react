@@ -20,7 +20,15 @@ function commitRoot() {
 function commitWork(fiber) {
   if (!fiber) 
     return
-  fiber.parent.dom.append(fiber.dom)
+  let parent = fiber.parent
+  while(!parent.dom) {
+    parent = parent.parent
+  }
+
+  if (fiber.dom) {
+    parent.dom.append(fiber.dom)
+  }
+
   commitWork(fiber.child)
   commitWork(fiber.sibling)
 }
@@ -51,8 +59,8 @@ let nextFiber = null
 
 function workLoop(deadline) {
   let shouldYield = false
+
   while (!shouldYield && nextFiber) {
-    console.log(nextFiber);
     nextFiber = perfromFiberUnit(nextFiber)
     shouldYield = deadline.timeRemaining() < 1
   }
@@ -65,14 +73,16 @@ function workLoop(deadline) {
 }
 
 function perfromFiberUnit(fiber) {
-  if (!fiber.dom) {
+  const isFunctionComponent = () => typeof fiber.type === 'function'
+  if (!isFunctionComponent() && !fiber.dom) {
     // create dom
     const el = (fiber.dom = createDom(fiber.type))
     // set props
     updateProps(el, fiber.props)
+  }
 
-    // appen
-    // fiber.parent.dom.append(el)
+  if (isFunctionComponent()) {
+    fiber.props.children = [fiber.type()]
   }
 
   initChildren(fiber)  
@@ -86,9 +96,7 @@ function perfromFiberUnit(fiber) {
     if (prevFiber.sibling)
       return prevFiber.sibling
     prevFiber = prevFiber.parent
-    // parentFiber = parentFiber.parent
   }
-  // return parentFiber.sibling
 }
 
 function createTextNode(text) {
