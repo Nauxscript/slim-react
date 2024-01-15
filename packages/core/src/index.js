@@ -12,6 +12,19 @@ function updateProps(el, props) {
   }); 
 }
 
+function commitRoot() {
+  commitWork(root.child)
+  root = null
+}
+
+function commitWork(fiber) {
+  if (!fiber) 
+    return
+  fiber.parent.dom.append(fiber.dom)
+  commitWork(fiber.child)
+  commitWork(fiber.sibling)
+}
+
 function initChildren(fiber) {
   let prevFiber = null
   fiber.props.children.forEach((child, index) => {
@@ -32,16 +45,23 @@ function initChildren(fiber) {
   }) 
 }
 
+let root = null
+
 let nextFiber = null
 
-function loop(deadline) {
+function workLoop(deadline) {
   let shouldYield = false
   while (!shouldYield && nextFiber) {
     console.log(nextFiber);
     nextFiber = perfromFiberUnit(nextFiber)
     shouldYield = deadline.timeRemaining() < 1
   }
-  requestIdleCallback(loop)
+
+  if (!nextFiber && root) {
+    commitRoot()
+  }
+
+  requestIdleCallback(workLoop)
 }
 
 function perfromFiberUnit(fiber) {
@@ -52,7 +72,7 @@ function perfromFiberUnit(fiber) {
     updateProps(el, fiber.props)
 
     // appen
-    fiber.parent.dom.append(el)
+    // fiber.parent.dom.append(el)
   }
 
   initChildren(fiber)  
@@ -60,12 +80,15 @@ function perfromFiberUnit(fiber) {
   if (fiber.child) {
     return fiber.child 
   }
-
-  if (fiber.sibling) {
-    return fiber.sibling
+  
+  let prevFiber = fiber
+  while (prevFiber) {
+    if (prevFiber.sibling)
+      return prevFiber.sibling
+    prevFiber = prevFiber.parent
+    // parentFiber = parentFiber.parent
   }
-
-  return fiber.parent.sibling
+  // return parentFiber.sibling
 }
 
 function createTextNode(text) {
@@ -78,7 +101,7 @@ function createTextNode(text) {
   }
 }
 
-requestIdleCallback(loop)
+requestIdleCallback(workLoop)
 
 export function render(vdom, container) {
   nextFiber = {
@@ -87,6 +110,8 @@ export function render(vdom, container) {
       children: [vdom]
     }
   }
+
+  root = nextFiber
 }
 
 export function createElement(type, props, ...children) {

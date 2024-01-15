@@ -1,7 +1,7 @@
 const App = <div id='app'>
   <div>
-    <p>Hello</p>
-    <p>,</p>
+    <span>Hello</span>
+    <span>,</span>
   </div>
   <div>Slim React!</div>
 </div>
