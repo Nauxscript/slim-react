@@ -72,20 +72,30 @@ function workLoop(deadline) {
   requestIdleCallback(workLoop)
 }
 
-function perfromFiberUnit(fiber) {
-  const isFunctionComponent = () => typeof fiber.type === 'function'
-  if (!isFunctionComponent() && !fiber.dom) {
+function updateFunctionComponent(fiber) {
+  fiber.props.children = [fiber.type(fiber.props)]
+  initChildren(fiber)
+}
+
+function updateHostComponent(fiber) {
+  if (!fiber.dom) {
     // create dom
     const el = (fiber.dom = createDom(fiber.type))
     // set props
     updateProps(el, fiber.props)
   }
 
-  if (isFunctionComponent()) {
-    fiber.props.children = [fiber.type(fiber.props)]
-  }
-
   initChildren(fiber)  
+}
+
+function perfromFiberUnit(fiber) {
+  const isFunctionComponent = typeof fiber.type === 'function'
+
+  if (isFunctionComponent) {
+    updateFunctionComponent(fiber)
+  } else {
+    updateHostComponent(fiber)
+  }
 
   if (fiber.child) {
     return fiber.child 
@@ -131,3 +141,4 @@ export function createElement(type, props, ...children) {
     }
   } 
 }
+
