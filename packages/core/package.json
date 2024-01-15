@@ -7,6 +7,9 @@
     "test": "vitest"
   },
   "keywords": [],
+  "dependencies": {
+    "@slim-react/shared": "workspace*"
+  },
   "author": "",
   "license": "ISC"
 }

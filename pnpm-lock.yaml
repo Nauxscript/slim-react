@@ -15,7 +15,11 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
 
-  packages/core: {}
+  packages/core:
+    dependencies:
+      '@slim-react/shared':
+        specifier: workspace*
+        version: link:../shared
 
   packages/playground:
     devDependencies:
@@ -31,6 +35,8 @@ importers:
       '@slim-react/core':
         specifier: workspace*
         version: link:../core
+
+  packages/shared: {}
 
   packages/slim-react:
     dependencies:

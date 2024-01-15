@@ -1,3 +1,5 @@
+import { isFunctionComponent, isTextNode } from "@slim-react/shared";
+
 function createDom(type) {
   return type === 'TEXT_ELEMENT'
   ? document.createTextNode('')
@@ -89,9 +91,7 @@ function updateHostComponent(fiber) {
 }
 
 function perfromFiberUnit(fiber) {
-  const isFunctionComponent = typeof fiber.type === 'function'
-
-  if (isFunctionComponent) {
+  if (isFunctionComponent(fiber.type)) {
     updateFunctionComponent(fiber)
   } else {
     updateHostComponent(fiber)
@@ -137,7 +137,7 @@ export function createElement(type, props, ...children) {
     type,
     props: {
       ...props,
-      children: children.map(c => typeof c === 'object' ? c : createTextNode(c))
+      children: children.map(c => isTextNode(c) ? createTextNode(c) : c)
     }
   } 
 }
