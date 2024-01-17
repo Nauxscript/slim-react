@@ -52,7 +52,7 @@ function commitWork(fiber) {
   }
 
   if (fiber.effctTag === 'update') {
-    updateProps(fiber.dom, fiber.props, fiber.alternate?.props) 
+    updateProps(fiber.dom, fiber.props, fiber.alternate?.props || {}) 
   } else if (fiber.effctTag === 'placement') {
     if (fiber.dom) {
       parent.dom.append(fiber.dom)
