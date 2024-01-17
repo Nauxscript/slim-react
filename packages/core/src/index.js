@@ -32,15 +32,15 @@ function updateProps(el, nextProps, prevProps) {
   }); 
 }
 
-let root = null
+let wipRoot = null
 let currentRoot = null
 let nextFiber = null
 
 function commitRoot() {
-  commitWork(root.child)
+  commitWork(wipRoot.child)
   // record the previous root to diff with new root when updating
-  currentRoot = root
-  root = null
+  currentRoot = wipRoot
+  wipRoot = null
 }
 
 function commitWork(fiber) {
@@ -64,7 +64,7 @@ function commitWork(fiber) {
   commitWork(fiber.sibling)
 }
 
-function initChildren(fiber) {
+function reconcileChildren(fiber) {
   let prevFiber = null
   let prevFiberChild = fiber.alternate?.child
   fiber.props.children.forEach((child, index) => {
@@ -111,7 +111,7 @@ function workLoop(deadline) {
     shouldYield = deadline.timeRemaining() < 1
   }
 
-  if (!nextFiber && root) {
+  if (!nextFiber && wipRoot) {
     commitRoot()
   }
 
@@ -120,7 +120,7 @@ function workLoop(deadline) {
 
 function updateFunctionComponent(fiber) {
   fiber.props.children = [fiber.type(fiber.props)]
-  initChildren(fiber)
+  reconcileChildren(fiber)
 }
 
 function updateHostComponent(fiber) {
@@ -131,7 +131,7 @@ function updateHostComponent(fiber) {
     updateProps(el, fiber.props, {})
   }
 
-  initChildren(fiber)  
+  reconcileChildren(fiber)  
 }
 
 function perfromFiberUnit(fiber) {
@@ -166,23 +166,23 @@ function createTextNode(text) {
 requestIdleCallback(workLoop)
 
 export function render(vdom, container) {
-  nextFiber = {
+  wipRoot = {
     dom: container,
     props: {
       children: [vdom]
     }
   }
 
-  root = nextFiber
+  nextFiber = wipRoot
 }
 
 export function update() {
-  nextFiber = {
+  wipRoot = {
     dom: currentRoot.dom,
     props: currentRoot.props,
     alternate: currentRoot
   }
-  root = nextFiber
+  nextFiber = wipRoot
 }
 
 export function createElement(type, props, ...children) {
