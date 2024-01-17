@@ -1,11 +1,13 @@
-function CounterContainer({num}) {
-  return <div>
-    <Counter num={num}></Counter>
-  </div>  
-}
-
 function Counter({num}) {
-  return <div>Counter: {num}</div> 
+
+  const handleClick = () => {
+    console.log('click');
+  }
+    
+  return <>
+    <button onClick={handleClick}> +1 s </button>
+    <div> Counter: {num}s </div>
+  </> 
 }
 
 function App() {
@@ -16,8 +18,7 @@ function App() {
         <span>,</span>
       </div>
       <div>Slim React!</div>
-      <CounterContainer num={10} ></CounterContainer>
-      <CounterContainer num={20} ></CounterContainer>
+      <Counter num={10} ></Counter>
     </div>
   )  
 }
