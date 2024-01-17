@@ -9,7 +9,12 @@ function createDom(type) {
 function updateProps(el, props) {
   Object.keys(props).forEach(key => {
     if (key !== 'children') {
-      el[key] = props[key]
+      if (key.startsWith('on')) {
+        const eventType = key.slice(2).toLowerCase()
+        el.addEventListener(eventType, props[key]) 
+      } else {
+        el[key] = props[key]
+      }
     }
   }); 
 }
