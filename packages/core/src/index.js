@@ -148,7 +148,7 @@ function workLoop(deadline) {
 
   while (!shouldYield && nextFiber) {
     nextFiber = perfromFiberUnit(nextFiber)
-    if (nextFiber?.type === wipFiber?.sibling?.type) {
+    if (nextFiber?.alternate && nextFiber?.type === wipFiber?.sibling?.type) {
       nextFiber = undefined
     }
     shouldYield = deadline.timeRemaining() < 1
