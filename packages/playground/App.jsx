@@ -52,13 +52,19 @@ function ToggleTip() {
 
 let isFirstTip = true
 function ConditionTip() {
-  function First() {
-    return <label>First Tip</label>   
-  }
+  const First = ( 
+    <div>First Tip</div>   
+  )
 
-  function Second() {
-    return <span>Second Tip</span> 
-  }
+  const Second = (
+    <div>
+      <span>Second Tip</span>
+      <p>Second Tip Description</p>
+      <p>Second Tip Another Description</p>
+    </div>
+  )
+    
+  
 
   const handleSwitch = () => {
     console.log('handleSwitch');
@@ -69,7 +75,7 @@ function ConditionTip() {
   return (
     <div>
       <button onClick={handleSwitch}>Switch Tip</button>
-      {isFirstTip ? <First></First> : <Second></Second> }
+      {isFirstTip ? First : Second }
     </div>
   )
 }
