@@ -6,6 +6,8 @@ let titleProps = {
 }
 
 function Counter({title}) {
+  console.log('%c Rendering: Counter ', 'color: red', )
+  const update = React.update()
   const handleClick = () => {
     console.log('click');
     titleProps = {
@@ -13,7 +15,7 @@ function Counter({title}) {
       role: 'title'
     }
     num++
-    React.update()
+    update()
   }
     
   return <>
@@ -26,17 +28,18 @@ function Counter({title}) {
 let innerTipVisible = false
 let TailTipVisible = false
 function ToggleTip() {
-
+  console.log('%c Rendering: ToggleTip ', 'color: red', )
+  const update = React.update()
   const handleToogleInnerTip = () => {
     console.log('handleToogleInnerTip');
     innerTipVisible = !innerTipVisible 
-    React.update()
+    update()
   }
 
   const handleToogleTailTip = () => {
     console.log('handleToogleTailTip');
     TailTipVisible = !TailTipVisible 
-    React.update()
+    update()
   }
 
   const Tip = ({title}) => <span>{title}</span>
@@ -52,6 +55,8 @@ function ToggleTip() {
 
 let isFirstTip = true
 function ConditionTip() {
+  console.log('%c Rendering: ConditionTip ', 'color: red', )
+  const update = React.update()
   const First = ( 
     <div>First Tip</div>   
   )
@@ -64,12 +69,10 @@ function ConditionTip() {
     </div>
   )
     
-  
-
   const handleSwitch = () => {
     console.log('handleSwitch');
     isFirstTip = !isFirstTip 
-    React.update()
+    update()
   }
 
   return (
