@@ -148,7 +148,7 @@ function workLoop(deadline) {
 
   while (!shouldYield && nextFiber) {
     nextFiber = perfromFiberUnit(nextFiber)
-    if (nextFiber?.alternate && nextFiber?.type === wipFiber?.sibling?.type) {
+    if (triggeringFiber && nextFiber?.type === triggeringFiber.sibling?.type) {
       nextFiber = undefined
     }
     shouldYield = deadline.timeRemaining() < 1
@@ -220,6 +220,8 @@ export function render(vdom, container) {
   nextFiber = wipRoot
 }
 
+
+let triggeringFiber = null
 export function update() {
   const currentFiber = wipFiber 
   return () => {
@@ -228,9 +230,8 @@ export function update() {
       alternate: currentFiber
     }
     nextFiber = wipRoot
+    triggeringFiber = currentFiber 
   }
-
-  
 }
 
 export function createElement(type, props, ...children) {
