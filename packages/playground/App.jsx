@@ -17,10 +17,21 @@ function Counter({title}) {
   }
     
   return <>
-    <h2 {...titleProps}>{title}</h2>
+    <h3 {...titleProps}>{title}</h3>
     <button onClick={handleClick}> +1 s </button>
     <div> Counter: {num}s </div>
   </> 
+}
+
+function FeatureBlock({title, children}) {
+  
+  return (
+    <section>
+      <h2>{title}</h2>
+      {...children}
+      <hr></hr>
+    </section>
+  )
 }
 
 function App() {
@@ -32,7 +43,9 @@ function App() {
           <span>Slim React!</span>
         </h1>
       </div>
-      <Counter title="This is a freaking counter" ></Counter>
+      <FeatureBlock title="Update Props">
+        <Counter title="This is a freaking counter" ></Counter>
+      </FeatureBlock>      
     </div>
   )  
 }
