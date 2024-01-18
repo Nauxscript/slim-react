@@ -36,11 +36,38 @@ let wipRoot = null
 let currentRoot = null
 let nextFiber = null
 
+let deletions = []
+
 function commitRoot() {
-  commitWork(wipRoot.child)
+  deletions.forEach(commitDeletion)
+  commitWork(wipRoot.child) 
   // record the previous root to diff with new root when updating
   currentRoot = wipRoot
   wipRoot = null
+  deletions = []
+}
+
+function  commitDeletion(fiber) {
+  if (fiber.dom) {
+    // removeDomV1(fiber)
+    removeDomV2(fiber)
+  } else {
+    if (fiber.child) {
+      commitDeletion(fiber.child)
+    }
+  } 
+}
+
+function removeDomV1(fiber) {
+  let parent = fiber.parent
+  while(!parent.dom) {
+    parent = parent.parent
+  }
+  parent.dom.removeChild(fiber.dom) 
+}
+
+function removeDomV2(fiber) {
+  fiber.dom.remove()  
 }
 
 function commitWork(fiber) {
@@ -82,14 +109,21 @@ function reconcileChildren(fiber) {
         alternate: prevFiberChild
       }
     } else {
-      newFiber = {
-        type: child.type,
-        props: child.props,
-        dom: null,
-        child: null,
-        sibling: null,
-        parent: fiber,
-        effctTag: 'placement'
+      if (child) {
+        newFiber = {
+          type: child.type,
+          props: child.props,
+          dom: null,
+          child: null,
+          sibling: null,
+          parent: fiber,
+          effctTag: 'placement'
+        }
+      }
+
+      if (prevFiberChild) {
+        console.log('should delete:', prevFiberChild);
+        deletions.push(prevFiberChild)
       }
     }
     if (index === 0) {
@@ -97,9 +131,16 @@ function reconcileChildren(fiber) {
     } else {
       prevFiber.sibling = newFiber
     }
-    prevFiberChild = prevFiberChild?.sibling
-    prevFiber = newFiber
-  }) 
+    if (prevFiberChild) {
+      prevFiberChild = prevFiberChild.sibling
+    }
+    if (child) {
+      prevFiber = newFiber
+    }
+  })
+  if (prevFiberChild) {
+    console.log('==== old', prevFiberChild);
+  }
 }
 
 
