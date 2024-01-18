@@ -7,7 +7,6 @@ function createDom(type) {
 }
 
 function updateProps(el, nextProps, prevProps) {
-
   Object.keys(prevProps).forEach((key) => {
     if (key !== 'children') {
       if (!(key in nextProps)) {
@@ -35,7 +34,7 @@ function updateProps(el, nextProps, prevProps) {
 let wipRoot = null
 let currentRoot = null
 let nextFiber = null
-
+let wipFiber = null
 let deletions = []
 
 function commitRoot() {
@@ -149,6 +148,9 @@ function workLoop(deadline) {
 
   while (!shouldYield && nextFiber) {
     nextFiber = perfromFiberUnit(nextFiber)
+    if (nextFiber?.type === wipFiber?.sibling?.type) {
+      nextFiber = undefined
+    }
     shouldYield = deadline.timeRemaining() < 1
   }
 
@@ -160,6 +162,7 @@ function workLoop(deadline) {
 }
 
 function updateFunctionComponent(fiber) {
+  wipFiber = fiber
   fiber.props.children = [fiber.type(fiber.props)]
   reconcileChildren(fiber)
 }
@@ -218,12 +221,16 @@ export function render(vdom, container) {
 }
 
 export function update() {
-  wipRoot = {
-    dom: currentRoot.dom,
-    props: currentRoot.props,
-    alternate: currentRoot
+  const currentFiber = wipFiber 
+  return () => {
+    wipRoot = {
+      ...currentFiber,
+      alternate: currentFiber
+    }
+    nextFiber = wipRoot
   }
-  nextFiber = wipRoot
+
+  
 }
 
 export function createElement(type, props, ...children) {
