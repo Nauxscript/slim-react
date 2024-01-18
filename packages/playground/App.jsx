@@ -23,6 +23,57 @@ function Counter({title}) {
   </> 
 }
 
+let innerTipVisible = false
+let TailTipVisible = false
+function ToggleTip() {
+
+  const handleToogleInnerTip = () => {
+    console.log('handleToogleInnerTip');
+    innerTipVisible = !innerTipVisible 
+    React.update()
+  }
+
+  const handleToogleTailTip = () => {
+    console.log('handleToogleTailTip');
+    TailTipVisible = !TailTipVisible 
+    React.update()
+  }
+
+  const Tip = ({title}) => <span>{title}</span>
+
+  return <div>
+    <button onClick={handleToogleInnerTip}>Toggle the inner tip</button>
+    {innerTipVisible && <Tip title="Inner Tip"></Tip>}
+    
+    <button onClick={handleToogleTailTip}>Toggle the tail tip</button>
+    {TailTipVisible && <Tip title="Tail Tip"></Tip>}
+  </div>
+}
+
+let isFirstTip = true
+function ConditionTip() {
+  function First() {
+    return <label>First Tip</label>   
+  }
+
+  function Second() {
+    return <span>Second Tip</span> 
+  }
+
+  const handleSwitch = () => {
+    console.log('handleSwitch');
+    isFirstTip = !isFirstTip 
+    React.update()
+  }
+
+  return (
+    <div>
+      <button onClick={handleSwitch}>Switch Tip</button>
+      {isFirstTip ? <First></First> : <Second></Second> }
+    </div>
+  )
+}
+
 function FeatureBlock({title, children}) {
   
   return (
@@ -46,6 +97,10 @@ function App() {
       <FeatureBlock title="Update Props">
         <Counter title="This is a freaking counter" ></Counter>
       </FeatureBlock>      
+      <FeatureBlock title="Update Children">
+        <ToggleTip></ToggleTip>
+        <ConditionTip></ConditionTip>
+      </FeatureBlock>
     </div>
   )  
 }
