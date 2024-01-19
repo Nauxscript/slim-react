@@ -1,4 +1,4 @@
-import { isFunctionComponent, isTextNode } from "@slim-react/shared";
+import { isFunctionComponent, isFunction, isTextNode } from "@slim-react/shared";
 
 function createDom(type) {
   return type === 'TEXT_ELEMENT'
@@ -269,7 +269,7 @@ export function useState(initialValue) {
   
   const setState = (action) => {
 
-    stateHook.actions.push(action)
+    stateHook.actions.push(isFunction(action) ? action : () => action)
 
     wipRoot = {
       ...currentFiber,
