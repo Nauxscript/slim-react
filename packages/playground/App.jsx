@@ -8,7 +8,7 @@ let titleProps = {
 
 function Counter({title}) {
   console.log('%c Rendering: Counter ', 'color: blue', )
-  const [num, setNum] = useState(10)
+  const [num, setNum] = useState(1)
   const handleClick = () => {
     console.log('click');
     // titleProps = {
@@ -16,6 +16,8 @@ function Counter({title}) {
     //   role: 'title'
     // }
     setNum((oldVal) => ++oldVal)
+    // setNum(1)
+    // setNum(() => 1)
   }
     
   return <>
@@ -112,7 +114,7 @@ function App() {
   return (
     <div id='app'>
       <div>
-        <h1 style="cursor: pointer" onClick={rap}>{titles[titleIndex]}</h1>
+        <h1 style="cursor: pointer; user-select: none;" onClick={rap}>{titles[titleIndex]}</h1>
       </div>
       <FeatureBlock title="Update Props">
         <Counter title="This is a freaking counter" ></Counter>
