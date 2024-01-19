@@ -268,8 +268,11 @@ export function useState(initialValue) {
   currentFiberStateHookIndex++
   
   const setState = (action) => {
-
-    stateHook.actions.push(isFunction(action) ? action : () => action)
+    const isFn = isFunction(action)
+    const eagerState = isFn ? action(stateHook.state) : action
+    if (eagerState === stateHook.state)
+      return
+    stateHook.actions.push(isFn ? action : () => action)
 
     wipRoot = {
       ...currentFiber,
