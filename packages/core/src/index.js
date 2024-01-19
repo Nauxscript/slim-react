@@ -162,7 +162,10 @@ function workLoop(deadline) {
 }
 
 function updateFunctionComponent(fiber) {
+  currentFiberStateHookIndex = 0
   wipFiber = fiber
+  wipFiber.stateHooks = []
+
   fiber.props.children = [fiber.type(fiber.props)]
   reconcileChildren(fiber)
 }
@@ -244,3 +247,31 @@ export function createElement(type, props, ...children) {
   } 
 }
 
+
+let currentFiberStateHookIndex = 0
+export function useState(initialValue) {
+  const currentFiber = wipFiber
+  const oldStateHook = currentFiber.alternate?.stateHooks[currentFiberStateHookIndex]
+  const stateHook = {
+    state: oldStateHook ? oldStateHook.state : initialValue
+  }
+
+  // save inner statehook
+  currentFiber.stateHooks.push(stateHook) 
+  currentFiberStateHookIndex++
+  
+  const setState = (action) => {
+
+    stateHook.state = action(stateHook.state)
+
+    wipRoot = {
+      ...currentFiber,
+      alternate: currentFiber
+    }
+
+    triggeringFiber = currentFiber
+    nextFiber = wipRoot
+  }
+
+  return [stateHook.state, setState]
+}
