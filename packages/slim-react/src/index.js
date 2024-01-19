@@ -1,11 +1,10 @@
-// export * from "@slim-react/react-dom"
-// export * from '@slim-react/core'
-
 import { createRoot } from '@slim-react/react-dom';
-import { createElement, update } from '@slim-react/core';
+import { createElement, useState } from '@slim-react/core';
+
+export { useState }
 
 export default {
-  update,
+  useState,
   createRoot,
   createElement
 }
