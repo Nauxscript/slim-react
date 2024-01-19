@@ -7,7 +7,7 @@ let titleProps = {
 }
 
 function Counter({title}) {
-  console.log('%c Rendering: Counter ', 'color: red', )
+  console.log('%c Rendering: Counter ', 'color: blue', )
   const [num, setNum] = useState(10)
   const handleClick = () => {
     console.log('click');
@@ -27,7 +27,7 @@ function Counter({title}) {
 
 
 function ToggleTip() {
-  console.log('%c Rendering: ToggleTip ', 'color: red', )
+  console.log('%c Rendering: ToggleTip ', 'color: green', )
 
   const [innerTipVisible, setInnerTipVisible] = useState(false)
   const [tailTipVisible, setTailTipVisible] = useState(false)
@@ -54,7 +54,7 @@ function ToggleTip() {
 }
 
 function ConditionTip() {
-  console.log('%c Rendering: ConditionTip ', 'color: red', )
+  console.log('%c Rendering: ConditionTip ', 'color: green', )
 
   const [isFirstTip, setIsFirstTip] = useState(true)
 
@@ -84,7 +84,7 @@ function ConditionTip() {
 }
 
 function FeatureBlock({title, children}) {
-  
+  console.log('%c Rendering: FeatureBlock ', 'color: pink', )  
   return (
     <section>
       <h2>{title}</h2>
@@ -95,13 +95,24 @@ function FeatureBlock({title, children}) {
 }
 
 function App() {
+  console.log('%c Rendering: App ', 'color: red')
+  // Slim React!
+  const titles = [
+    'Hi, my name is, what?',
+    'My name is, who?',
+    'My name is, chka-chka...',
+    'Slim React! 🤣'
+  ]
+  const [titleIndex, setTitleIndex] = useState(0)
+
+  const rap = () => {
+    setTitleIndex(() => titleIndex === 3 ? 0 : titleIndex + 1)
+  }
+  
   return (
     <div id='app'>
       <div>
-        <h1>
-          <span>Hello, </span>
-          <span>Slim React!</span>
-        </h1>
+        <h1 style="cursor: pointer" onClick={rap}>{titles[titleIndex]}</h1>
       </div>
       <FeatureBlock title="Update Props">
         <Counter title="This is a freaking counter" ></Counter>
