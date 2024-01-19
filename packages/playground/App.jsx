@@ -1,4 +1,5 @@
-let num = 10
+import React, { useState } from 'slim-react';
+
 let titleProps = {
   id: 'counter-title',
   style: 'border: 1px solid gray',
@@ -7,15 +8,14 @@ let titleProps = {
 
 function Counter({title}) {
   console.log('%c Rendering: Counter ', 'color: red', )
-  const update = React.update()
+  const [num, setNum] = useState(10)
   const handleClick = () => {
     console.log('click');
-    titleProps = {
-      id: 'counter-title-2',
-      role: 'title'
-    }
-    num++
-    update()
+    // titleProps = {
+    //   id: 'counter-title-2',
+    //   role: 'title'
+    // }
+    setNum((oldVal) => ++oldVal)
   }
     
   return <>
@@ -25,21 +25,21 @@ function Counter({title}) {
   </> 
 }
 
-let innerTipVisible = false
-let TailTipVisible = false
+
 function ToggleTip() {
   console.log('%c Rendering: ToggleTip ', 'color: red', )
-  const update = React.update()
+
+  const [innerTipVisible, setInnerTipVisible] = useState(false)
+  const [tailTipVisible, setTailTipVisible] = useState(false)
+
   const handleToogleInnerTip = () => {
     console.log('handleToogleInnerTip');
-    innerTipVisible = !innerTipVisible 
-    update()
+    setInnerTipVisible((oldVal) => !oldVal)
   }
 
   const handleToogleTailTip = () => {
     console.log('handleToogleTailTip');
-    TailTipVisible = !TailTipVisible 
-    update()
+    setTailTipVisible((oldVal) => !oldVal) 
   }
 
   const Tip = ({title}) => <span>{title}</span>
@@ -49,14 +49,15 @@ function ToggleTip() {
     {innerTipVisible && <Tip title="Inner Tip"></Tip>}
     
     <button onClick={handleToogleTailTip}>Toggle the tail tip</button>
-    {TailTipVisible && <Tip title="Tail Tip"></Tip>}
+    {tailTipVisible && <Tip title="Tail Tip"></Tip>}
   </div>
 }
 
-let isFirstTip = true
 function ConditionTip() {
   console.log('%c Rendering: ConditionTip ', 'color: red', )
-  const update = React.update()
+
+  const [isFirstTip, setIsFirstTip] = useState(true)
+
   const First = ( 
     <div>First Tip</div>   
   )
@@ -71,8 +72,7 @@ function ConditionTip() {
     
   const handleSwitch = () => {
     console.log('handleSwitch');
-    isFirstTip = !isFirstTip 
-    update()
+    setIsFirstTip((oldVal) => !oldVal)
   }
 
   return (
