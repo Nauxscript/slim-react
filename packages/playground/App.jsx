@@ -121,12 +121,17 @@ function Todo() {
 
   useEffect(() => {
     console.log('run every time component render');
+    return function() {
+      console.log('cleanup every compoent rerendering'); 
+    }
   })
 
   useEffect(() => {
     console.log("run when deps' item changes or the component first rendering");
-    console.log(todos.length);
     setIncompletedCount(todos.length) 
+    return function() {
+      console.log('cleanup only todos.length change');
+    }
   }, [todos.length])
 
   return <div>

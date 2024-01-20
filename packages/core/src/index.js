@@ -24,7 +24,6 @@ function updateProps(el, nextProps, prevProps) {
           el.removeEventListener(eventType, prevProps[key])
           el.addEventListener(eventType, nextProps[key]) 
         } else if (key === 'style') {
-          console.log(nextProps[key]);
           updateStyle(el, nextProps[key])        
         } else {
           el[key] = nextProps[key]
@@ -74,21 +73,20 @@ function commitEffectHooks() {
           if (!fiber.alternate) {
             effect.callback()
             return
-          }
-  
-          const oldEffectHookDeps = fiber.alternate.effectHooks[index].deps
-          const isDepsChange = effect.deps.some((dep, i) => dep !== oldEffectHookDeps[i])
-          console.log(effect.deps, oldEffectHookDeps);
-          if (isDepsChange) {
-            effect.callback()
-          }
+          } 
+
+          const isDepsChange = fiber.alternate.effectHooks[index].deps.some((oldDep, i) => oldDep !== effect.deps[i])
+          // const isDepsChange = effect.deps.some((dep, i) => dep !== oldEffectHookDeps[i])
+          isDepsChange && (effect.cleanup = effect.callback())
         } else {
+          // todo: cleanup should run when component unmount
+
           // empty deps, run and only run once
           !fiber.alternate && effect.callback()
         }
       } else {
         // has not set deps, run every time component render
-        effect.callback()
+        effect.cleanup = effect.callback()
       }
     })
 
@@ -96,7 +94,20 @@ function commitEffectHooks() {
     run(fiber.sibling)
   }
 
-  
+  function runCleanup(fiber) {
+    if (!fiber) 
+      return
+    fiber.alternate?.effectHooks?.forEach((effect) => {
+      if (!effect.deps || effect.deps.length) {
+        // run cleanup
+        isFunction(effect.cleanup) && effect.cleanup()
+      }
+    })   
+    runCleanup(fiber.child)
+    runCleanup(fiber.sibling)
+  }
+
+  runCleanup(wipFiber) 
   run(wipFiber)
 }
 
