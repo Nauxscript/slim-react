@@ -61,9 +61,15 @@ function commitRoot() {
 }
 
 function commitEffect() {
-  if (!wipFiber?.alternate) {
-    wipFiber?.effectHook.callback()
-  }
+  wipFiber?.effectHooks.forEach(effect => {
+    if (!wipFiber.alternate) {
+      effect.callback()
+    } else {
+      if (effect.deps.length) {
+        // todo
+      }
+    }
+  })
 }
 
 function  commitDeletion(fiber) {
@@ -185,6 +191,7 @@ function updateFunctionComponent(fiber) {
   currentFiberStateHookIndex = 0
   wipFiber = fiber
   wipFiber.stateHooks = []
+  wipFiber.effectHooks = []
 
   fiber.props.children = [fiber.type(fiber.props)]
   reconcileChildren(fiber)
@@ -312,5 +319,5 @@ export function useEffect(callback, deps) {
     callback,
     deps
   }
-  currentFiber.effectHook = effectHook
+  currentFiber.effectHooks.push(effectHook)
 }

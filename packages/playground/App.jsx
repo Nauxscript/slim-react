@@ -118,6 +118,10 @@ function Todo() {
     console.log('run and only run once');
   })
 
+  useEffect(() => {
+    console.log('annother effect run and only run once');
+  })
+
   return <div>
     <input value={inputValue} type="text" onKeyUp={handleAdd} onInput={(e) => setInputValue(e.target.value)} placeholder='what do you want to do today?' />
     <ul>
