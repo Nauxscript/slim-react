@@ -93,7 +93,7 @@ function commitWork(fiber) {
 function reconcileChildren(fiber) {
   let prevFiber = null
   let prevFiberChild = fiber.alternate?.child
-  fiber.props.children.forEach((child, index) => {
+  fiber.props.children.flat(1).forEach((child, index) => {
     let newFiber
     const isSameType = prevFiberChild && child.type === prevFiberChild.type
     if (isSameType) {
