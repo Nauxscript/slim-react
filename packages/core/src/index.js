@@ -23,12 +23,25 @@ function updateProps(el, nextProps, prevProps) {
           // event listener dedupe
           el.removeEventListener(eventType, prevProps[key])
           el.addEventListener(eventType, nextProps[key]) 
+        } else if (key === 'style') {
+          console.log(nextProps[key]);
+          updateStyle(el, nextProps[key])        
         } else {
           el[key] = nextProps[key]
         }
       }
     }
   }); 
+}
+
+function updateStyle(el, styles) {
+  if (typeof styles === 'string') {
+    el.style = styles
+  } else {
+    Object.keys(styles).forEach((key) => {
+      el.style[key] = styles[key]
+    })
+  }
 }
 
 let wipRoot = null
