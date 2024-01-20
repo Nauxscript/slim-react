@@ -1,27 +1,20 @@
 import React, { useState } from 'slim-react';
 
-let titleProps = {
-  id: 'counter-title',
-  style: 'border: 1px solid gray',
-  foo: 1
-}
-
 function Counter({title}) {
   console.log('%c Rendering: Counter ', 'color: blue', )
-  const [num, setNum] = useState(1)
+  const [num, setNum] = useState(0)
+  const [attr, setAttr] = useState({
+    id: 'counter-title',
+    style: 'border-radius: 4px;padding: 2px;border: 2px solid gray;',
+    foo: 1
+  })
   const handleClick = () => {
-    console.log('click');
-    // titleProps = {
-    //   id: 'counter-title-2',
-    //   role: 'title'
-    // }
+    setAttr(() => ({role: 'title', style: `border-radius: 4px;padding: 2px;border: 2px solid ${num % 2 === 0 ? 'blue' : 'gray'}`}))
     setNum((oldVal) => ++oldVal)
-    // setNum(1)
-    // setNum(() => 1)
   }
     
   return <div>
-    <h3 {...titleProps}>{title}</h3>
+    <h3 {...attr}>{title}</h3>
     <button onClick={handleClick}> +1 s </button>
     <div> Counter: {num}s </div>
   </div> 
@@ -35,12 +28,10 @@ function ToggleTip() {
   const [tailTipVisible, setTailTipVisible] = useState(false)
 
   const handleToogleInnerTip = () => {
-    console.log('handleToogleInnerTip');
     setInnerTipVisible((oldVal) => !oldVal)
   }
 
   const handleToogleTailTip = () => {
-    console.log('handleToogleTailTip');
     setTailTipVisible((oldVal) => !oldVal) 
   }
 
@@ -73,7 +64,6 @@ function ConditionTip() {
   )
     
   const handleSwitch = () => {
-    console.log('handleSwitch');
     setIsFirstTip((oldVal) => !oldVal)
   }
 
