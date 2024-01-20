@@ -88,13 +88,14 @@ function FeatureBlock({title, children}) {
 
 function Todo() {
   const [inputValue, setInputValue] = useState('')
-  const [todos, setTodos] = useState([{title: 1111111, done: false}])
+  const [todos, setTodos] = useState([{title: 1111111, completed: false}])
+  const [incompletedCount, setIncompletedCount] = useState(0)
 
   const handleAdd = (e) => {
     if (e.key === 'Enter') {
       setTodos(oldList => ([...oldList, {
         title: e.target.value,
-        done: false,
+        completed: false,
       }]))
       setInputValue('')
     }
@@ -104,11 +105,11 @@ function Todo() {
     setTodos(oldList => oldList.filter((item, index) => index !== currIndex))
   }
 
-  const handleDone = (currIndex) => {
-    console.log('done');
+  const handleComplete = (currIndex) => {
+    console.log('completed');
     setTodos(oldList => oldList.map((todo, index) => {
       if (currIndex === index) {
-        return {...todo, done: !todo.done}
+        return {...todo, completed: !todo.completed}
       }
       return todo
     }))
@@ -116,19 +117,24 @@ function Todo() {
 
   useEffect(() => {
     console.log('run and only run once');
+  }, [])
+
+  useEffect(() => {
+    console.log('run every time component render');
   })
 
   useEffect(() => {
-    console.log('annother effect run and only run once');
-  })
+    setIncompletedCount(todos.length) 
+  }, [todos.length])
 
   return <div>
     <input value={inputValue} type="text" onKeyUp={handleAdd} onInput={(e) => setInputValue(e.target.value)} placeholder='what do you want to do today?' />
+    <div>一共有 {incompletedCount} 个任务</div>
     <ul>
       {
         todos.map((todo, index) => <li>
-            <span style={{padding: '4px', textDecorationLine: todo.done ? 'line-through' : 'none'}}>{todo.title}</span>
-            <button onClick={() => handleDone(index)}>{ todo.done ? '❎' : '✅'}</button>
+            <span style={{padding: '4px', textDecorationLine: todo.completed ? 'line-through' : 'none'}}>{todo.title}</span>
+            <button onClick={() => handleComplete(index)}>{ todo.completed ? '❎' : '✅'}</button>
             <button onClick={() => handleDelete(index)}>✖️</button>
           </li>)
       }
