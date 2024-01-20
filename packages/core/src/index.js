@@ -53,10 +53,17 @@ let deletions = []
 function commitRoot() {
   deletions.forEach(commitDeletion)
   commitWork(wipRoot.child) 
+  commitEffect()
   // record the previous root to diff with new root when updating
   currentRoot = wipRoot
   wipRoot = null
   deletions = []
+}
+
+function commitEffect() {
+  if (!wipFiber?.alternate) {
+    wipFiber?.effectHook.callback()
+  }
 }
 
 function  commitDeletion(fiber) {
@@ -297,4 +304,13 @@ export function useState(initialValue) {
   }
 
   return [stateHook.state, setState]
+}
+
+export function useEffect(callback, deps) {
+  const currentFiber = wipFiber
+  const effectHook = {
+    callback,
+    deps
+  }
+  currentFiber.effectHook = effectHook
 }
