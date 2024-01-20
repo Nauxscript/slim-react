@@ -86,6 +86,48 @@ function FeatureBlock({title, children}) {
   )
 }
 
+function Todo() {
+  const [inputValue, setInputValue] = useState('')
+  const [todos, setTodos] = useState([{title: 1111111, done: false}])
+
+  const handleAdd = (e) => {
+    if (e.key === 'Enter') {
+      setTodos(oldList => ([...oldList, {
+        title: e.target.value,
+        done: false,
+      }]))
+      setInputValue('')
+    }
+  }
+
+  const handleDelete = (currIndex) => {
+    setTodos(oldList => oldList.filter((item, index) => index !== currIndex))
+  }
+
+  const handleDone = (currIndex) => {
+    console.log('done');
+    setTodos(oldList => oldList.map((todo, index) => {
+      if (currIndex === index) {
+        return {...todo, done: !todo.done}
+      }
+      return todo
+    }))
+  }
+
+  return <div>
+    <input value={inputValue} type="text" onKeyUp={handleAdd} onInput={(e) => setInputValue(e.target.value)} placeholder='what do you want to do today?' />
+    <ul>
+      {
+        todos.map((todo, index) => <li>
+            <span style={{padding: '4px', textDecorationLine: todo.done ? 'line-through' : 'none'}}>{todo.title}</span>
+            <button onClick={() => handleDone(index)}>{ todo.done ? '❎' : '✅'}</button>
+            <button onClick={() => handleDelete(index)}>✖️</button>
+          </li>)
+      }
+    </ul>
+  </div> 
+}
+
 function App() {
   console.log('%c Rendering: App ', 'color: red')
   // Slim React!
@@ -103,7 +145,7 @@ function App() {
   
   return (
     <div id='app'>
-      <div>
+      {/* <div>
         <h1 style="cursor: pointer; user-select: none;" onClick={rap}>{titles[titleIndex]}</h1>
       </div>
       <FeatureBlock title="Update Props">
@@ -112,6 +154,9 @@ function App() {
       <FeatureBlock title="Update Children">
         <ToggleTip></ToggleTip>
         <ConditionTip></ConditionTip>
+      </FeatureBlock> */}
+      <FeatureBlock title="UseEffect">
+        <Todo></Todo>
       </FeatureBlock>
     </div>
   )  
