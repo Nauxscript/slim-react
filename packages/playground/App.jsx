@@ -166,7 +166,7 @@ function App() {
   
   return (
     <div id='app'>
-      {/* <div>
+      <div>
         <h1 style="cursor: pointer; user-select: none;" onClick={rap}>{titles[titleIndex]}</h1>
       </div>
       <FeatureBlock title="Update Props">
@@ -175,7 +175,7 @@ function App() {
       <FeatureBlock title="Update Children">
         <ToggleTip></ToggleTip>
         <ConditionTip></ConditionTip>
-      </FeatureBlock> */}
+      </FeatureBlock>
       <FeatureBlock title="UseEffect">
         <Todo></Todo>
       </FeatureBlock>
