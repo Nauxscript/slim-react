@@ -20,11 +20,11 @@ function Counter({title}) {
     // setNum(() => 1)
   }
     
-  return <>
+  return <div>
     <h3 {...titleProps}>{title}</h3>
     <button onClick={handleClick}> +1 s </button>
     <div> Counter: {num}s </div>
-  </> 
+  </div> 
 }
 
 
