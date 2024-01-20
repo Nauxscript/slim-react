@@ -88,8 +88,8 @@ function FeatureBlock({title, children}) {
 
 function Todo() {
   const [inputValue, setInputValue] = useState('')
-  const [todos, setTodos] = useState([{title: 1111111, completed: false}])
-  const [incompletedCount, setIncompletedCount] = useState(0)
+  const [todos, setTodos] = useState([])
+  const [incompletedCount, setIncompletedCount] = useState(todos.length)
 
   const handleAdd = (e) => {
     if (e.key === 'Enter') {
@@ -124,6 +124,8 @@ function Todo() {
   })
 
   useEffect(() => {
+    console.log("run when deps' item changes or the component first rendering");
+    console.log(todos.length);
     setIncompletedCount(todos.length) 
   }, [todos.length])
 

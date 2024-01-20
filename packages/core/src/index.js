@@ -53,39 +53,51 @@ let deletions = []
 function commitRoot() {
   deletions.forEach(commitDeletion)
   commitWork(wipRoot.child) 
-  commitEffect()
+  commitEffectHooks()
   // record the previous root to diff with new root when updating
   currentRoot = wipRoot
-  wipRoot = null
+  if (!nextFiber) {
+    wipRoot = null
+  }
   deletions = []
 }
 
-function commitEffect() {
-  wipFiber?.effectHooks.forEach(effect => {
-    if (effect.deps) {
+function commitEffectHooks() {
 
-      if (effect.deps.length) {
-        // only run when deps' item changes
+  function run(fiber) {
+    if (!fiber) 
+      return
+    fiber.effectHooks?.forEach((effect, index) => {
+      if (effect.deps) {
+        if (effect.deps.length) {
+          // run when deps' item changes or the component first rendering
+          if (!fiber.alternate) {
+            effect.callback()
+            return
+          }
+  
+          const oldEffectHookDeps = fiber.alternate.effectHooks[index].deps
+          const isDepsChange = effect.deps.some((dep, i) => dep !== oldEffectHookDeps[i])
+          console.log(effect.deps, oldEffectHookDeps);
+          if (isDepsChange) {
+            effect.callback()
+          }
+        } else {
+          // empty deps, run and only run once
+          !fiber.alternate && effect.callback()
+        }
       } else {
-        // empty deps, run and only run once
-        !wipFiber.alternate && effect.callback()
+        // has not set deps, run every time component render
+        effect.callback()
       }
-    } else {
-      // has not set deps, run every time component render
-      effect.callback()
-    }
-    // if (effect.deps.length) {
-    //   // todo
-    //   console.log('has deps');
-    // } else if () {
-    //   // no deps
-    // }
+    })
 
-    // if (!wipFiber.alternate) {
-    //   effect.callback()
-    // } else {
-    // }
-  })
+    run(fiber.child)
+    run(fiber.sibling)
+  }
+
+  
+  run(wipFiber)
 }
 
 function  commitDeletion(fiber) {
