@@ -1,4 +1,4 @@
-import React, { useState } from 'slim-react';
+import React, { useState, useEffect } from 'slim-react';
 
 function Counter({title}) {
   console.log('%c Rendering: Counter ', 'color: blue', )
@@ -113,6 +113,10 @@ function Todo() {
       return todo
     }))
   }
+
+  useEffect(() => {
+    console.log('run and only run once');
+  })
 
   return <div>
     <input value={inputValue} type="text" onKeyUp={handleAdd} onInput={(e) => setInputValue(e.target.value)} placeholder='what do you want to do today?' />
