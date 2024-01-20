@@ -62,13 +62,29 @@ function commitRoot() {
 
 function commitEffect() {
   wipFiber?.effectHooks.forEach(effect => {
-    if (!wipFiber.alternate) {
-      effect.callback()
-    } else {
+    if (effect.deps) {
+
       if (effect.deps.length) {
-        // todo
+        // only run when deps' item changes
+      } else {
+        // empty deps, run and only run once
+        !wipFiber.alternate && effect.callback()
       }
+    } else {
+      // has not set deps, run every time component render
+      effect.callback()
     }
+    // if (effect.deps.length) {
+    //   // todo
+    //   console.log('has deps');
+    // } else if () {
+    //   // no deps
+    // }
+
+    // if (!wipFiber.alternate) {
+    //   effect.callback()
+    // } else {
+    // }
   })
 }
 
