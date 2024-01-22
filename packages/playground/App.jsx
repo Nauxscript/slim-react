@@ -136,7 +136,7 @@ function Todo() {
 
   return <div>
     <input value={inputValue} type="text" onKeyUp={handleAdd} onInput={(e) => setInputValue(e.target.value)} placeholder='what do you want to do today?' />
-    <div>一共有 {incompletedCount} 个任务</div>
+    <div>Total number of tasks: {incompletedCount}</div>
     <ul>
       {
         todos.map((todo, index) => <li>
