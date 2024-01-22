@@ -89,6 +89,7 @@ function FeatureBlock({title, children}) {
 function Todo() {
   const [inputValue, setInputValue] = useState('')
   const [todos, setTodos] = useState([])
+  const [total, setTotal] = useState(todos.length)
   const [incompletedCount, setIncompletedCount] = useState(todos.length)
 
   const handleAdd = (e) => {
@@ -128,15 +129,17 @@ function Todo() {
 
   useEffect(() => {
     console.log("run when deps' item changes or the component first rendering");
-    setIncompletedCount(todos.length) 
+    setTotal(todos.length)
+    setIncompletedCount(() => todos.filter(i => !i.completed).length)
     return function() {
       console.log('cleanup only todos.length change');
     }
-  }, [todos.length])
+  }, [JSON.stringify(todos)])
 
   return <div>
     <input value={inputValue} type="text" onKeyUp={handleAdd} onInput={(e) => setInputValue(e.target.value)} placeholder='what do you want to do today?' />
-    <div>Total number of tasks: {incompletedCount}</div>
+    <p>Total number of tasks: {total}</p>
+    <p>Total number of incompleted tasks: {incompletedCount}</p>
     <ul>
       {
         todos.map((todo, index) => <li>
